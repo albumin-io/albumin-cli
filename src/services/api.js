@@ -20,7 +20,6 @@ module.exports = function ({
     credentials: 'include',
     method,
     headers,
-    agent,
     ...(body ? {body: JSON.stringify(body)} : false),
   };
 
