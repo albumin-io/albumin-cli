@@ -1,0 +1,29 @@
+{
+  "name": "albumin-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool for Albumin.io",
+  "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "albumin": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albumin-io/albumin-cli.git"
+  },
+  "author": "Davi Figueiredo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/albumin-io/albumin-cli/issues"
+  },
+  "homepage": "https://github.com/albumin-io/albumin-cli#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "clui": "^0.3.6",
+    "commander": "^6.1.0",
+    "node-fetch": "^2.6.1"
+  }
+}
