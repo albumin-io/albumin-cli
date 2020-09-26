@@ -24,6 +24,7 @@
     "chalk": "^4.1.0",
     "clui": "^0.3.6",
     "commander": "^6.1.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "simple-git": "^2.20.1"
   }
 }

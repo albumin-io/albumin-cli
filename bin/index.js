@@ -12,9 +12,10 @@ program
 
 program 
   .command('create')
+  .usage('[options] <project_folder>')
   .option('-p, --port <port>', 'Specify the port of your application.')
-  .option('-d, --domain', 'Specify the domain of your application.')
-  .action( require('./../src/routes/create'))
+  .option('-d, --domain <domain>', 'Specify the domain of your application.')
+  .action(require('./../src/routes/create'))
 
 
 program.parse(process.argv);
