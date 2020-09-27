@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const debug = require('debug')('albumin:api')
 
 module.exports = function ({
   endpoint = '',
@@ -23,10 +24,12 @@ module.exports = function ({
     ...(body ? {body: JSON.stringify(body)} : false),
   };
 
-  console.log(destination, request.body)
+  debug(destination, request.body)
 
   return fetch(destination, request)
     .then((response) => {
+
+      debug(response)
       // response.ok is the primary verification of fetch. 
       if (response.ok) {
         return response;

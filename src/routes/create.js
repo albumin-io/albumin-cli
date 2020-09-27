@@ -1,40 +1,61 @@
-const API = require('./../services/api.js')
-const git = require('simple-git')
-const path = require('path');
-const fs = require('fs')
-const chalk = require('chalk')
-const {Spinner} = require('clui')
 
-const spin = new Spinner('Processing...', ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'].map( el => chalk.rgb(255, 145, 0)(el)))
 
-module.exports = async function(cmd,env){
+const file = require('./../services/file')
+const loading = require('./../components/loading');
+const show = require('../components/show.js');
+const requests = require('../services/request.js');
+const git = require('../services/git.js');
+const prompt = require('prompt-sync')()
+const debug = require('debug')('albumin:commander')
 
-  spin.start()
 
-  if(!cmd.args[0]) return console.log("No path was provided.")
 
-  const repoPath = path.resolve(cmd.args[0])
+module.exports = async function({ args:[path], port, domain}){
 
-  //Check if the repository directory exists
-  if(!fs.existsSync(repoPath)) {
-    return console.log("Unable to reach directory.")
-  } 
+  debug(path, port, domain)
 
-  const remoteUrl = await git(repoPath)
-    .checkIsRepo()
-    .listConfig()
-    .then(config => config.values['.git/config']['remote.origin.url'])
+  loading.start()
 
-  const res = await API({
-    url: 'http://localhost:3001/api/docker/create',
-    method: 'POST',
-    body: {
-      repo: remoteUrl
-    }
-  })
+  if(!path) return console.log("No path was provided.")
 
-  spin.stop()
+  path = file.resolve(path)
 
-  console.log(chalk.rgb(255, 145, 0)(`URL: ${res.url}`))
-  console.log(chalk.rgb(255, 145, 0)(`Key: your-key`))
+  debug(path)
+
+  if(!file.validate(path)) return console.log('Path is invalid. Check if the folde is reacheable of if you have the correct permissions.')
+  if(!git.validate(path)) return console.log('Path is not a valid git repository. Check for the hidden ./.git folder inside it.')
+
+  let url =  await git.remoteUrl(path)
+
+  debug(url)
+
+  const isPrivate = await git.isPrivate(url)
+
+  if(isPrivate){
+    show.bold('It seams that this is a private repository.')
+    url.username  = prompt('Username:');
+    url.password= prompt('Token:', {echo: '*'});
+  }
+
+
+  debug(url)
+
+  try{
+    const res = await requests.createContainer({
+      repo: url.href,
+    })
+
+    loading.stop()
+    show.primary(`URL: ${res.url}`)
+
+    return true
+  } catch(err){
+    loading.stop()
+    throw err
+  }
+
+
+
+
+
 }

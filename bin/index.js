@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const npm = require('./../package.json')
+const npm = require('./../package.json');
 
 program
   .version(npm.version)
