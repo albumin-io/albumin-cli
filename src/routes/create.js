@@ -1,11 +1,9 @@
-
-
 const file = require('./../services/file')
 const loading = require('./../components/loading');
 const show = require('../components/show.js');
 const requests = require('../services/request.js');
 const git = require('../services/git.js');
-const prompt = require('prompt-sync')()
+const prompt = require('prompt-sync')({sigint: true, eot: true})
 const debug = require('debug')('albumin:commander')
 
 
@@ -53,9 +51,4 @@ module.exports = async function({ args:[path], port, domain}){
     loading.stop()
     throw err
   }
-
-
-
-
-
 }
